@@ -1,0 +1,33 @@
+<h2>Listing <%= schema.human_plural %></h2>
+
+<table class="table is-bordered is-striped is-narrow is-fullwidth">
+  <thead>
+    <tr>
+<%= for {k, _} <- schema.attrs do %>      <th><%= Phoenix.Naming.humanize(Atom.to_string(k)) %></th>
+<% end %>
+      <th></th>
+    </tr>
+  </thead>
+    <tfoot>
+    <tr>
+<%= for {k, _} <- schema.attrs do %>      <th><%= Phoenix.Naming.humanize(Atom.to_string(k)) %></th>
+<% end %>
+      <th></th>
+    </tr>
+  </tfoot>
+  <tbody>
+<%%= for <%= schema.singular %> <- @<%= schema.plural %> do %>
+    <tr>
+<%= for {k, _} <- schema.attrs do %>      <td><%%= <%= schema.singular %>.<%= k %> %></td>
+<% end %>
+      <td class="text-right">
+        <span><%%= link "Show", to: <%= schema.route_helper %>_path(@conn, :show, <%= schema.singular %>), class: "button is-info" %></span>
+        <span><%%= link "Edit", to: <%= schema.route_helper %>_path(@conn, :edit, <%= schema.singular %>), class: "button is-warning" %></span>
+        <span><%%= link "Delete", to: <%= schema.route_helper %>_path(@conn, :delete, <%= schema.singular %>), method: :delete, data: [confirm: "Are you sure?"], class: "button is-danger" %></span>
+      </td>
+    </tr>
+<%% end %>
+  </tbody>
+</table>
+
+<span><%%= link "New <%= schema.human_singular %>", to: <%= schema.route_helper %>_path(@conn, :new) %></span>
