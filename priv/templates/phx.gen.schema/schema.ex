@@ -3,6 +3,8 @@ defmodule <%= inspect schema.module %> do
   import Ecto.Changeset
   alias <%= inspect schema.module %>
   alias <%= inspect schema.repo %>
+  import Ecto.Query, warn: false
+
 
 <%= if schema.binary_id do %>
   @primary_key {:id, :binary_id, autogenerate: true}
@@ -22,10 +24,11 @@ defmodule <%= inspect schema.module %> do
 <%= for k <- schema.uniques do %>    |> unique_constraint(<%= inspect k %>)
 <% end %>  end
 
-  def list(query \\ __MODULE__) do
-    query
-    |> Repo.all()
-  end
+def list(<%= schema.singular %> \\ __MODULE__, query \\ []) do
+  <%= schema.singular %>
+  |> Ecto.Query.where(^query)
+  |> Repo.all()
+end
 
   def get!(id), do: Repo.get!(__MODULE__, id)
 
